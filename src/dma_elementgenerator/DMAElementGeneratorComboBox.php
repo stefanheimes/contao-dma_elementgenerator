@@ -1,4 +1,5 @@
 <?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
+
 /**
  * Contao webCMS
  * Extension DMA Elementgenerator
@@ -37,24 +38,24 @@
  * @author     Janosch Skuplik <skuplik@dma.do>
  * @package    DMAElementGenerator
  */
-
 class DMAElementGeneratorComboBox extends \SelectMenu
 {
-	/**
-	* Overide method isValidOption
-	**/
-	protected function isValidOption($varValue) {
-		return true;
-	}
+    /**
+     * Overide method isValidOption
+     **/
+    protected function isValidOption($varValue)
+    {
+        return true;
+    }
 
 
-	/**
-	 * Generate the widget and return it as string
-	 * @return string
-	 */
-	public function generate()
-	{
-		$this->chosen = true;
-		return parent::generate();
-	}
+    /**
+     * Generate the widget and return it as string
+     * @return string
+     */
+    public function generate()
+    {
+        $this->chosen = true;
+        return parent::generate();
+    }
 }
