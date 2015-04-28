@@ -1,6 +1,6 @@
 {
-  "name": "dma/dma_elementgenerator",
-  "description": "Erlaubt das Erstellen von eigenen Contentelement und Modulen",
+  "name": "byteworks/dma_elementgenerator",
+  "description": "Create custom content elements and modules",
   "keywords": [
     "elements",
     "contentelement",
@@ -22,6 +22,12 @@
       "name": "Carsten Kollmeier",
       "email": "carsten@ckollmeier.de",
       "homepage": "",
+      "role": "Contributor"
+    },
+    {
+      "name": "Michael Bischof",
+      "email": "mb@byteworks.ch",
+      "homepage": "http://www.byteworks.ch",
       "role": "Contributor"
     }
   ],
