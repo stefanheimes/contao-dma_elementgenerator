@@ -435,7 +435,7 @@ $GLOBALS['TL_DCA']['tl_dma_eg_fields'] = array(
             'eval'             => array('tl_class' => 'w50')
         ),
         'hyperlink_data'       => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fiels']['hyperlink_data'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fields']['hyperlink_data'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'options'   => array(
@@ -452,7 +452,7 @@ $GLOBALS['TL_DCA']['tl_dma_eg_fields'] = array(
             )
         ),
         'image_data'           => array(
-            'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fiels']['image_data'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fields']['image_data'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'options'   => array(

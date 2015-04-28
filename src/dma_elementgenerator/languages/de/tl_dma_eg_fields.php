@@ -223,7 +223,7 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['renderHiddenData']      = array(
     'Sollen die Inhalte dieses Feldes im Template zur Verfügung stehen, auch wenn das Feld im Backend ausgeblendet ist?'
 );
 
-$GLOBALS['TL_LANG']['tl_dma_eg_fiels']['hyperlink_data']          = array(
+$GLOBALS['TL_LANG']['tl_dma_eg_fields']['hyperlink_data']          = array(
     'Hyperlink-Daten',
     'Welche Daten sollen für den Hyperlink abgefragt werden?'
 );
@@ -235,7 +235,7 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['hyperlink_data_options'] = array(
     'embed'     => 'Den Link einbetten'
 );
 
-$GLOBALS['TL_LANG']['tl_dma_eg_fiels']['image_data']          = array(
+$GLOBALS['TL_LANG']['tl_dma_eg_fields']['image_data']          = array(
     'Bild-Daten',
     'Welche Daten sollen für das Bild abgefragt werden?'
 );
