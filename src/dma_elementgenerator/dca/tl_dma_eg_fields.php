@@ -205,7 +205,7 @@ $GLOBALS['TL_DCA']['tl_dma_eg_fields'] = array(
             'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fields']['default_value'],
             'inputType' => 'text',
             'exclude'   => true,
-            'eval'      => array('maxlength' => 255)
+            'eval'      => array('maxlength' => 255, 'allowHtml' => true)
         ),
         'options'              => array(
             'label'     => &$GLOBALS['TL_LANG']['tl_dma_eg_fields']['options'],
