@@ -326,6 +326,7 @@ class DMAElementGeneratorCallbacks extends Backend
                                 'alwaysSave'     => true,
                                 'doNotSaveEmpty' => true,
                                 'multiple'       => ($objField->type == 'checkboxWizard' || substr($objField->eval_field_type, 3) == 'checkbox') ? true : false,
+                                'isAssociative'  => true,
                                 'decodeEntities' => $objField->eval_decodeEntities ? true : false,
                                 'csv'            => ','
                             ),
@@ -399,7 +400,19 @@ class DMAElementGeneratorCallbacks extends Backend
                         }
 
                         if ($create) {
-                            $fields[$objField->title] = $objField->default_value;
+                            switch ($objField->type) {
+                                case 'select':
+                                    foreach (deserialize($objField->options) as $arrOption) {
+                                        if ($arrOption['default']) {
+                                            $fields[$objField->title] = $arrOption['value'];
+                                            break;
+                                        }
+                                    }
+                                    break;
+
+                                default:
+                                    $fields[$objField->title] = $objField->default_value;
+                            }
                         }
                         else {
                             if ($GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval']['multiple'] && isset($GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval']['csv'])) {
