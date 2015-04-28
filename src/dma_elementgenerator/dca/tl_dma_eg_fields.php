@@ -110,7 +110,7 @@ $GLOBALS['TL_DCA']['tl_dma_eg_fields'] = array(
         'default'      => '{type_legend},type',
         'legend'       => '{type_legend},type,label,hidden;{subpalette_legend:hide},useCheckboxCondition',
         'text'         => '{type_legend},type,label,title,explanation;{input_legend},default_value,eval_mandatory,eval_rgxp,eval_minlength,eval_maxlength;{style_legend},eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,eval_allow_html,class,template',
-        'textarea'     => '{type_legend},type,label,title,explanation;{input_legend},default_value,eval_mandatory,eval_rows,eval_cols,eval_rte,eval_maxlength;{style_legend},eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,eval_allow_html,class,template',
+        'textarea'     => '{type_legend},type,label,title,explanation;{input_legend},default_value,eval_mandatory,eval_rows,eval_cols,eval_rte,eval_rte_profile,eval_maxlength;{style_legend},eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,eval_allow_html,class,template',
         'select'       => '{type_legend},type,label,title,explanation;{input_legend},eval_mandatory,optionsType;{style_legend},eval_blank_option,eval_chosen,eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,class,template',
         'checkbox'     => '{type_legend},type,label,title,explanation;{input_legend},eval_mandatory,options;{style_legend},eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,class,template',
         'radio'        => '{type_legend},type,label,title,explanation;{input_legend},eval_mandatory,options;{style_legend},eval_tl_class;{subpalette_legend:hide},useCheckboxCondition;{expert_legend:hide},exclude,class,template',
@@ -267,8 +267,22 @@ $GLOBALS['TL_DCA']['tl_dma_eg_fields'] = array(
             'exclude'   => true,
             'eval'      => array(
                 'maxlength' => 128,
-                'tl_class'  => 'm12 clr',
+                'tl_class'  => 'w50',
                 'isBoolean' => true
+            )
+        ),
+        'eval_rte_profile' => array(
+            'label'            => &$GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rte_profile'],
+            'inputType'        => 'select',
+            'options_callback' => array(
+                'tl_dma_eg_fields',
+                'getTinyMCEConfigs'
+            ),
+            'exclude'          => true,
+            'eval'             => array(
+                'maxlength'          => 128,
+                'tl_class'           => 'w50',
+                'includeBlankOption' => true
             )
         ),
         'eval_tl_class'        => array(
@@ -700,6 +714,24 @@ class tl_dma_eg_fields extends Backend
         else {
             return $this->getTemplateGroup('dma_egfield_');
         }
+    }
+
+    /**
+     * @param DataContainer $dc
+     *
+     * @return array
+     */
+    public function getTinyMCEConfigs(DataContainer $dc)
+    {
+        $arrConfigs = array();
+
+        foreach (glob(TL_ROOT . '/system/config/tinyMCE*.php') as $strFile) {
+            $strName = basename($strFile, '.php');
+
+            $arrConfigs[] = $strName;
+        }
+
+        return $arrConfigs;
     }
 
 }

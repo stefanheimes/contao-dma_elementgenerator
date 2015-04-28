@@ -345,7 +345,12 @@ class DMAElementGeneratorCallbacks extends Backend
                             )
                         );
                         if ($objField->eval_rte) {
-                            $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval']['rte'] = ($strTableName == 'content' ? $GLOBALS['TL_DCA']['tl_content']['fields']['text']['eval']['rte'] : 'tinyMCE');
+                            if ($objField->eval_rte_profile != '') {
+                                $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval']['rte'] = $objField->eval_rte_profile;
+                            }
+                            else {
+                                $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval']['rte'] = ($strTableName == 'content' ? $GLOBALS['TL_DCA']['tl_content']['fields']['text']['eval']['rte'] : 'tinyMCE');
+                            }
                         }
                         if ($objField->eval_path) {
                             // path is array for Contao 3

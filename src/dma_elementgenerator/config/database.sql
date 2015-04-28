@@ -56,6 +56,7 @@ CREATE TABLE `tl_dma_eg_fields` (
   `eval_tl_class` varchar(255) NOT NULL default '',
   `eval_rgxp` varchar(255) NOT NULL default '',
   `eval_rte` char(1) NOT NULL default '',
+  `eval_rte_profile` varchar(255) NOT NULL default '',
   `eval_extensions` varchar(255) NOT NULL default '',
   `eval_allow_html` char(1) NOT NULL default '',
   `eval_unique` char(1) NOT NULL default '',
