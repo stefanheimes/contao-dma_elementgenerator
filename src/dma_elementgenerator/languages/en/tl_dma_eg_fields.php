@@ -84,7 +84,7 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type_select']           = array(
     'radio'             => 'Radiobuttons',
     'pageTree'          => 'Page selection',
     'fileTree'          => 'File selection',
-    'multiColumnWizard' => 'MultiColumnWizard',
+    'multiColumnWizard' => 'Multicolumn Wizard',
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['label']                 = array(
     'Label',

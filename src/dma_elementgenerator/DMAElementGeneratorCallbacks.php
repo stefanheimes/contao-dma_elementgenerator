@@ -433,8 +433,8 @@ class DMAElementGeneratorCallbacks extends Backend
                             }
                         }
 
-                        if (isset($GLOBALS['TL_CONFIG']['dma_elementgenerator'][$strType][$objField->title]))
-                        {
+                        if (isset($GLOBALS['TL_CONFIG']['dma_elementgenerator'][$strType][$objField->title])) {
+                            
                             $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval'] = array_merge(
                                 $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval'],
                                 $GLOBALS['TL_CONFIG']['dma_elementgenerator'][$strType][$objField->title]

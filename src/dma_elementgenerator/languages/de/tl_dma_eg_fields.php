@@ -94,7 +94,7 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type_select']           = array(
     'tableWizard'       => 'Tabelle',
     'hyperlink'         => 'Hyperlink',
     'image'             => 'Bild',
-    'multiColumnWizard' => 'MultiColumnWizard',
+    'multiColumnWizard' => 'Multicolumn-Wizard',
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['label']                 = array(
     'Beschriftung',
