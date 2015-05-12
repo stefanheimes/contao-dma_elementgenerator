@@ -97,4 +97,9 @@ $GLOBALS['TL_HOOKS']['loadLanguageFile'][] = array(
 );
 
 
-?>
+/**
+ * Local settings
+ */
+if (file_exists(TL_ROOT . '/system/config/module-multicolumnwizard.php')) {
+    include_once(TL_ROOT . '/system/config/module-multicolumnwizard.php');
+}

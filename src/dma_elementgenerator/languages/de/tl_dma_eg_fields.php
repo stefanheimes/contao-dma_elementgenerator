@@ -81,19 +81,20 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type_disabled']         = array(
     'Feldtyp können nachträglich leider nicht mehr geändert werden. Um den Feldtypen zu ändern löschen Sie bitte dieses Feld und fügen ein neues hinzu.'
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type_select']           = array(
-    'legend'      => 'Legende',
-    'text'        => 'Textfeld',
-    'textarea'    => 'Textarea',
-    'select'      => 'Auswahlliste',
-    'checkbox'    => 'Checkboxen',
-    'radio'       => 'Radiobuttons',
-    'pageTree'    => 'Seitenauswahl',
-    'fileTree'    => 'Dateiauswahl',
-    'pagePicker'  => 'Seitenpicker',
-    'listWizard'  => 'Liste',
-    'tableWizard' => 'Tabelle',
-    'hyperlink'   => 'Hyperlink',
-    'image'       => 'Bild'
+    'legend'            => 'Legende',
+    'text'              => 'Textfeld',
+    'textarea'          => 'Textarea',
+    'select'            => 'Auswahlliste',
+    'checkbox'          => 'Checkboxen',
+    'radio'             => 'Radiobuttons',
+    'pageTree'          => 'Seitenauswahl',
+    'fileTree'          => 'Dateiauswahl',
+    'pagePicker'        => 'Seitenpicker',
+    'listWizard'        => 'Liste',
+    'tableWizard'       => 'Tabelle',
+    'hyperlink'         => 'Hyperlink',
+    'image'             => 'Bild',
+    'multiColumnWizard' => 'MultiColumnWizard',
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['label']                 = array(
     'Beschriftung',

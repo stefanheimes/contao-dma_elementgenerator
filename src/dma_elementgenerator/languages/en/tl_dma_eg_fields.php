@@ -76,14 +76,15 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type']                  = array(
     'Choose field type'
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['type_select']           = array(
-    'legend'   => 'Legend',
-    'text'     => 'Textfield',
-    'textarea' => 'Textarea',
-    'select'   => 'Selectmenu',
-    'checkbox' => 'Checkboxes',
-    'radio'    => 'Radiobuttons',
-    'pageTree' => 'Page selection',
-    'fileTree' => 'File selection'
+    'legend'            => 'Legend',
+    'text'              => 'Textfield',
+    'textarea'          => 'Textarea',
+    'select'            => 'Selectmenu',
+    'checkbox'          => 'Checkboxes',
+    'radio'             => 'Radiobuttons',
+    'pageTree'          => 'Page selection',
+    'fileTree'          => 'File selection',
+    'multiColumnWizard' => 'MultiColumnWizard',
 );
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['label']                 = array(
     'Label',
