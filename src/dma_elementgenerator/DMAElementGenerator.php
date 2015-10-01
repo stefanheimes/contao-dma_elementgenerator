@@ -74,13 +74,39 @@ class DMAElementGenerator extends Frontend
     }
 
 
+    /**
+     * The compile function gets called every time an element needs to be rendered.
+     * When this happens for the first time for a specific element
+     * the data will be generated and cached (tl_content.dma_eg_cache)
+     * otherwise the data will be taken from the cache.
+     *
+     * While saving an element the cache gets deleted:
+     * See DMAElementGeneratorCallbacks::save_data
+     */
     protected function compile($data)
     {
-        $elementID = str_replace(DMA_EG_PREFIX, '', $data->type);
+        $elementID = substr($data->type, strlen(DMA_EG_PREFIX));
+        $strCache  = $data->dma_eg_cache;
 
-            $objElement = $this->Database->prepare("SELECT * FROM tl_dma_eg WHERE id=?")
+        if (TL_MODE == 'FE' && $strCache !== null) {
+            // Get from cache
+
+            $arrCache                = unserialize($strCache);
+            $arrData                 = $arrCache['arrData'];
+            $objElement              = $arrCache['objElement'];
+            $objTemplate             = $arrCache['objTemplate'];
+            $strTemplate             = $arrCache['strTemplate'];
+            $arrDbDrivenSelectFields = $arrCache['arrDbDrivenSelectFields'];
+        } else {
+            // Generate and cache it
+
+            $arrDbDrivenSelectFields = [];
+
+            $objElement = (object) $this->Database
+                ->prepare("SELECT * FROM tl_dma_eg WHERE id=?")
                 ->limit(1)
                 ->execute($elementID)
+                ->fetchAssoc()
             ;
 
 
@@ -256,14 +282,7 @@ class DMAElementGenerator extends Frontend
 
                 // Handling von Selectmenüs mit Datenbankstruktur
                 if ($objField->type == 'select' && $objField->optionsType == 'database') {
-                    $objDatabaseData = $this->Database->prepare("SELECT * FROM " . $objField->optDbTable . " WHERE id=?")
-                        ->limit(1)
-                        ->execute($arrData[$objField->title])
-                    ;
-                    if ($objDatabaseData->numRows == 1) {
-                        $arrTemplateData[$objField->title]['value'] = $objDatabaseData->row();
-                    }
-
+                    $arrDbDrivenSelectFields[] = (object) $objField->fetchAssoc();
                 }
 
                 // Handling von Selectmenüs und eigener Key-Struktur
@@ -595,7 +614,9 @@ class DMAElementGenerator extends Frontend
                 }
             }
 
-            $objTemplate = new FrontendTemplate(($objElement->template ? $objElement->template : $this->strTemplate));
+            //$objTemplate = new FrontendTemplate(($objElement->template ? $objElement->template : $this->strTemplate));
+            $objTemplate = new stdClass();
+            $strTemplate = ($objElement->template ? $objElement->template : $this->strTemplate);
 
             //Ausgabe in divs statt ul-li-Konstruktion ermöglichen
             if ($this->displayInDivs) {
@@ -619,23 +640,6 @@ class DMAElementGenerator extends Frontend
             $objTemplate->fields         = $strFields;
             $objTemplate->data           = $arrTemplateData;
 
-            // Counter for Elements and Global
-            if (!isset($GLOBALS['DMA_EG']['EL_COUNT']['all'])) {
-                $GLOBALS['DMA_EG']['EL_COUNT']['all'] = 0;
-            }
-            else {
-                $GLOBALS['DMA_EG']['EL_COUNT']['all']++;
-            }
-
-            if (!isset($GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)])) {
-                $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)] = 0;
-            }
-            else {
-                $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)]++;
-            }
-            $objTemplate->gobalCounter  = $GLOBALS['DMA_EG']['EL_COUNT']['all'];
-            $objTemplate->singleCounter = $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)];
-
 
             $arrStyle = array();
 
@@ -651,7 +655,66 @@ class DMAElementGenerator extends Frontend
             $objTemplate->cssID = ($data->cssID[0] != '') ? ' id="' . $data->cssID[0] . '"' : '';
             $objTemplate->class = trim(($objElement->content ? 'ce_' : 'mod_') . $data->type . ' ' . $data->cssID[1]);
 
-        return $objTemplate->parse();
+
+            if (TL_MODE == 'FE') {
+                // Set cache
+
+                $arrCache = [
+                    'arrData'                 => $arrData,
+                    'objElement'              => $objElement,
+                    'objTemplate'             => $objTemplate,
+                    'strTemplate'             => $strTemplate,
+                    'arrDbDrivenSelectFields' => $arrDbDrivenSelectFields,
+                ];
+
+                $strCache = serialize($arrCache);
+
+                $this->Database
+                    ->prepare('UPDATE tl_content SET dma_eg_cache = ? WHERE id = ?')
+                    ->execute($strCache, $data->id)
+                ;
+            }
+        }
+
+
+        // Handling von Selectmenüs mit Datenbankstruktur
+        foreach ($arrDbDrivenSelectFields as $objField) {
+            $objDatabaseData = $this->Database
+                ->prepare("SELECT * FROM " . $objField->optDbTable . " WHERE id=?")
+                ->limit(1)
+                ->execute($arrData[$objField->title])
+            ;
+
+            if ($objDatabaseData->numRows == 1) {
+                $objTemplate->data[$objField->title]['value'] = $objDatabaseData->row();
+            }
+        }
+
+        // Counter for Elements and Global
+        if (!isset($GLOBALS['DMA_EG']['EL_COUNT']['all'])) {
+            $GLOBALS['DMA_EG']['EL_COUNT']['all'] = 0;
+        }
+        else {
+            $GLOBALS['DMA_EG']['EL_COUNT']['all']++;
+        }
+
+        if (!isset($GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)])) {
+            $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)] = 0;
+        }
+        else {
+            $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)]++;
+        }
+        $objTemplate->gobalCounter  = $GLOBALS['DMA_EG']['EL_COUNT']['all'];
+        $objTemplate->singleCounter = $GLOBALS['DMA_EG']['EL_COUNT'][standardize($objElement->title)];
+
+        // Output the template
+        $objOutput = new FrontendTemplate($strTemplate);
+
+        foreach ($objTemplate as $key => $value) {
+            $objOutput->$key = $value;
+        }
+
+        return $objOutput->parse();
     }
 
 

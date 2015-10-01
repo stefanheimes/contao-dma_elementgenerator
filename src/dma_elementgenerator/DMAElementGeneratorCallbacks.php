@@ -631,8 +631,15 @@ class DMAElementGeneratorCallbacks extends Backend
     /**
      * Saves the field values
      */
-    public function save_data($varValue)
+    public function save_data($varValue, $dc)
     {
+        // Delete cache
+        // See DMAElementGenerator::compile
+        $this->Database
+            ->prepare('UPDATE tl_content SET dma_eg_cache = NULL WHERE id = ?')
+            ->execute($dc->id)
+        ;
+
         return serialize(self::$_dma_fields);
     }
 
