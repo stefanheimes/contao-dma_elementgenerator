@@ -636,7 +636,7 @@ class DMAElementGeneratorCallbacks extends Backend
         // Delete cache
         // See DMAElementGenerator::compile
         $this->Database
-            ->prepare('UPDATE tl_content SET dma_eg_cache = NULL WHERE id = ?')
+            ->prepare(sprintf('UPDATE %s SET dma_eg_cache = NULL WHERE id = ?', $dc->table))
             ->execute($dc->id)
         ;
 
@@ -694,6 +694,17 @@ class DMAElementGeneratorCallbacks extends Backend
     {
         $this->import("Database");
         $this->store_configuration();
+
+        // Delete cache
+        // See DMAElementGenerator::compile
+        $this->Database
+            ->prepare('UPDATE tl_content SET dma_eg_cache = NULL WHERE type = ?')
+            ->execute('dma_eg_' . $dc->id)
+        ;
+        $this->Database
+            ->prepare('UPDATE tl_module SET dma_eg_cache = NULL WHERE type = ?')
+            ->execute('dma_eg_' . $dc->id)
+        ;
     }
 
     /**
