@@ -282,7 +282,7 @@ class DMAElementGenerator extends Frontend
 
                 // Handling von Selectmenüs mit Datenbankstruktur
                 if ($objField->type == 'select' && $objField->optionsType == 'database') {
-                    $arrDbDrivenSelectFields[] = (object) $objField->fetchAssoc();
+                    $arrDbDrivenSelectFields[] = (object) $objField->row();
                 }
 
                 // Handling von Selectmenüs und eigener Key-Struktur
