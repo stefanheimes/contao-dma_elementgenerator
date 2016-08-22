@@ -41,10 +41,19 @@
 class DMAElementGenerator extends Frontend
 {
     protected $strTemplate   = 'dma_eg_default';
+    private   $strTable;
     private   $displayInDivs = false;
 
     public function generate($data)
     {
+        if ($data instanceof DMAElementGeneratorContent) {
+            $this->strTable = 'tl_content';
+        } elseif ($data instanceof DMAElementGeneratorModule) {
+            $this->strTable = 'tl_module';
+        } else {
+            throw new Exception('Unexpected type');
+        }
+
         return $this->compile($data);
     }
 
@@ -77,7 +86,7 @@ class DMAElementGenerator extends Frontend
     /**
      * The compile function gets called every time an element needs to be rendered.
      * When this happens for the first time for a specific element
-     * the data will be generated and cached (tl_content.dma_eg_cache)
+     * the data will be generated and cached (tl_content.dma_eg_cache, tl_module.dma_eg_cache)
      * otherwise the data will be taken from the cache.
      *
      * While saving an element the cache gets deleted:
@@ -670,7 +679,7 @@ class DMAElementGenerator extends Frontend
                 $strCache = serialize($arrCache);
 
                 $this->Database
-                    ->prepare('UPDATE tl_content SET dma_eg_cache = ? WHERE id = ?')
+                    ->prepare(sprintf('UPDATE %s SET dma_eg_cache = ? WHERE id = ?', $this->strTable))
                     ->execute($strCache, $data->id)
                 ;
             }
