@@ -105,11 +105,13 @@ class DMAElementGenerator extends Frontend
             $objElement              = $arrCache['objElement'];
             $objTemplate             = $arrCache['objTemplate'];
             $strTemplate             = $arrCache['strTemplate'];
-            $arrDbDrivenSelectFields = $arrCache['arrDbDrivenSelectFields'];
+            $arrDbDrivenSelectFields = isset($arrCache['arrDbDrivenSelectFields']) ? $arrCache['arrDbDrivenSelectFields'] : [];
+            $arrFileFieldNames       = isset($arrCache['arrFileFieldNames'])       ? $arrCache['arrFileFieldNames']       : [];
         } else {
             // Generate and cache it
 
             $arrDbDrivenSelectFields = [];
+            $arrFileFieldNames       = [];
 
             $objElement = (object) $this->Database
                 ->prepare("SELECT * FROM tl_dma_eg WHERE id=?")
@@ -360,6 +362,7 @@ class DMAElementGenerator extends Frontend
                     }
                     if (is_array(deserialize($arrData[$objField->title]))) {
                         //mehrere Dateien
+                        $arrFileFieldNames[] = $objField->title;
                         $tempArrFiles                               = deserialize($arrData[$objField->title]);
                         $arrTemplateData[$objField->title]['value'] = array();
                         foreach ($tempArrFiles as $file) {
@@ -436,6 +439,7 @@ class DMAElementGenerator extends Frontend
                         //eine Datei
                         // file-handling for Contao 3
 
+                        $arrFileFieldNames[] = $objField->title;
                         $objFile = null;
 
                         if (is_numeric($arrData[$objField->title])) {
@@ -674,6 +678,7 @@ class DMAElementGenerator extends Frontend
                     'objTemplate'             => $objTemplate,
                     'strTemplate'             => $strTemplate,
                     'arrDbDrivenSelectFields' => $arrDbDrivenSelectFields,
+                    'arrFileFieldNames'       => $arrFileFieldNames,
                 ];
 
                 $strCache = serialize($arrCache);
@@ -698,6 +703,33 @@ class DMAElementGenerator extends Frontend
                 $objTemplate->data[$objField->title]['value'] = $objDatabaseData->row();
             }
         }
+
+        // Update image paths based on UUID
+        foreach ($arrFileFieldNames as $strName) {
+            $arrFieldData  = &$objTemplate->data[$strName];
+            $arrImagePaths = [];
+            
+            foreach ($arrFieldData['value'] as &$arrValue) {
+                $objFile = \FilesModel::findByUuid($arrValue['raw']);
+                
+                if ($objFile) {
+                    $strMeta         = deserialize($objFile->meta);
+                    $objFile         = new \File($objFile->path, true);
+                    $arrImagePaths[] = $objFile->value;
+                    $arrValue['meta']                   = $strMeta;
+                    $arrValue['src']                    = $objFile->value;
+                    $arrValue['value']                  = $objFile->value;
+                    $arrValue['dl']                     = $this->Environment->request . (($GLOBALS['TL_CONFIG']['disableAlias'] || strpos($this->Environment->request, '?') !== false) ? '&amp;' : '?') . 'file=' . $this->urlEncode($objFile->value);
+                    $arrValue['attributes']['width']    = $objFile->width;
+                    $arrValue['attributes']['height']   = $objFile->height;
+                    $arrValue['attributes']['filename'] = $objFile->filename;
+                }
+            }
+            unset($arrValue);
+
+            $objTemplate->elements[$strName] = implode(',', $arrImagePaths);
+        }
+        unset($arrFieldData);
 
         // Counter for Elements and Global
         if (!isset($GLOBALS['DMA_EG']['EL_COUNT']['all'])) {
@@ -724,6 +756,13 @@ class DMAElementGenerator extends Frontend
         }
 
         return $objOutput->parse();
+    }
+
+
+    public function purgeCache()
+    {
+        $this->Database->execute('UPDATE tl_content SET dma_eg_cache = NULL');
+        $this->Database->execute('UPDATE tl_module SET dma_eg_cache = NULL');
     }
 
 
