@@ -709,23 +709,25 @@ class DMAElementGenerator extends Frontend
             $arrFieldData  = &$objTemplate->data[$strName];
             $arrImagePaths = [];
             
-            foreach ($arrFieldData['value'] as &$arrValue) {
-                $objFile = \FilesModel::findByUuid($arrValue['raw']);
-                
-                if ($objFile) {
-                    $strMeta         = deserialize($objFile->meta);
-                    $objFile         = new \File($objFile->path, true);
-                    $arrImagePaths[] = $objFile->value;
-                    $arrValue['meta']                   = $strMeta;
-                    $arrValue['src']                    = $objFile->value;
-                    $arrValue['value']                  = $objFile->value;
-                    $arrValue['dl']                     = $this->Environment->request . (($GLOBALS['TL_CONFIG']['disableAlias'] || strpos($this->Environment->request, '?') !== false) ? '&amp;' : '?') . 'file=' . $this->urlEncode($objFile->value);
-                    $arrValue['attributes']['width']    = $objFile->width;
-                    $arrValue['attributes']['height']   = $objFile->height;
-                    $arrValue['attributes']['filename'] = $objFile->filename;
+            if ($arrFieldData['value']) {
+                foreach ($arrFieldData['value'] as &$arrValue) {
+                    $objFile = \FilesModel::findByUuid($arrValue['raw']);
+                    
+                    if ($objFile) {
+                        $strMeta         = deserialize($objFile->meta);
+                        $objFile         = new \File($objFile->path, true);
+                        $arrImagePaths[] = $objFile->value;
+                        $arrValue['meta']                   = $strMeta;
+                        $arrValue['src']                    = $objFile->value;
+                        $arrValue['value']                  = $objFile->value;
+                        $arrValue['dl']                     = $this->Environment->request . (($GLOBALS['TL_CONFIG']['disableAlias'] || strpos($this->Environment->request, '?') !== false) ? '&amp;' : '?') . 'file=' . $this->urlEncode($objFile->value);
+                        $arrValue['attributes']['width']    = $objFile->width;
+                        $arrValue['attributes']['height']   = $objFile->height;
+                        $arrValue['attributes']['filename'] = $objFile->filename;
+                    }
                 }
+                unset($arrValue);
             }
-            unset($arrValue);
 
             $objTemplate->elements[$strName] = implode(',', $arrImagePaths);
         }
