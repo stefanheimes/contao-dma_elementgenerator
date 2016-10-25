@@ -602,6 +602,9 @@ class DMAElementGeneratorCallbacks extends Backend
      */
     public function load_field($strName, $varValue)
     {
+        if ($varValue) {
+            return $varValue;
+        }
         return self::$_dma_fields[$strName];
     }
 
