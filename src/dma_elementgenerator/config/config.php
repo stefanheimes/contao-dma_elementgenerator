@@ -82,6 +82,12 @@ $GLOBALS['BE_FFL']['dma_eg_hidden']   = 'DMAElementGeneratorHiddenWidget';
 $GLOBALS['BE_FFL']['dma_eg_combobox'] = 'DMAElementGeneratorComboBox';
 $GLOBALS['DMA_EG']['EL_COUNT']        = array();
 
+// Purge cache
+$GLOBALS['TL_PURGE']['custom']['dma_elementgenerator']['callback'] = array(
+    'DMAElementGenerator',
+    'purgeCache'
+);
+
 
 // Hooks
 if (version_compare(VERSION . BUILD, '3.10', '>=') && version_compare(VERSION . BUILD, '3.20', '<')) {

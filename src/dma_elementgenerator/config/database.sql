@@ -1,12 +1,12 @@
 
 
 CREATE TABLE `tl_content` (
-  `dma_eg_data` longtext NULL,
+  `dma_eg_data` longblob NULL,
   `dma_eg_cache` longblob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 CREATE TABLE `tl_module` (
-  `dma_eg_data` longtext NULL,
+  `dma_eg_data` longblob NULL,
   `dma_eg_cache` longblob NULL,
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
