@@ -124,6 +124,10 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rte']              = array(
     'Richtexteditor verwenden',
     'Erlaubt die Nutzung des Richtexteditors'
 );
+$GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rte_profile']      = array(
+    'Richtexteditor Profil',
+    'Profil des Richtexteditors'
+);
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rgxp']             = array(
     'Eingabeprüfung',
     'Die Eingaben anhand eines regulären Ausdrucks prüfen.'

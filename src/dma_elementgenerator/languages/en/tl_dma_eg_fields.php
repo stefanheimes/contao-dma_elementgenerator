@@ -110,6 +110,10 @@ $GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rte']              = array(
     'Richtexteditor',
     'Make use of the Richtexteditor'
 );
+$GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rte_profile']      = array(
+    'Richtexteditor Profile',
+    'Profile of the Richtexteditor'
+);
 $GLOBALS['TL_LANG']['tl_dma_eg_fields']['eval_rgxp']             = array(
     'Input validation',
     'Validate the input against a regular expression.'
