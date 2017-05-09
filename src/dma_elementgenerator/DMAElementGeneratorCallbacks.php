@@ -434,7 +434,7 @@ class DMAElementGeneratorCallbacks extends Backend
                         }
 
                         if (isset($GLOBALS['TL_CONFIG']['dma_elementgenerator'][$strType][$objField->title])) {
-                            
+
                             $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval'] = array_merge(
                                 $GLOBALS['TL_DCA'][$strTable]['fields'][$title]['eval'],
                                 $GLOBALS['TL_CONFIG']['dma_elementgenerator'][$strType][$objField->title]
@@ -616,7 +616,12 @@ class DMAElementGeneratorCallbacks extends Backend
 
         if (($this->elementDca['type'] == 'fileTree' || strpos($strName, "singleSRC") !== false) && version_compare(VERSION . BUILD, '3.20', '>=')) {
             if (strlen($varValue) == 16) {
-                $varValue = \String::binToUuid($varValue);
+                // PHP 7 compatibility, see https://github.com/contao/core-bundle/issues/309
+                if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
+                    $varValue = \StringUtil::binToUuid($varValue);
+                } else {
+                    $varValue = \String::binToUuid($varValue);
+                }
             }
             elseif ($this->elementDca['eval_field_type'] == "ft_checkbox") {
                 // ToDo check ob mehrere
@@ -625,9 +630,15 @@ class DMAElementGeneratorCallbacks extends Backend
                 $intDoWhile = true;
 
                 while ($intDoWhile) {
-                    //$arrValues[] = \String::binToUuid(substr($tempValue,0,16));
-                    $arrValues[] = $tempValue ? \String::binToUuid(substr($tempValue, 0, 16)) : '';
-                    $tempValue   = substr($tempValue, 17);
+                    // PHP 7 compatibility, see https://github.com/contao/core-bundle/issues/309
+                    if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
+                        //$arrValues[] = \StringUtil::binToUuid(substr($tempValue,0,16));
+                        $arrValues[] = $tempValue ? \StringUtil::binToUuid(substr($tempValue, 0, 16)) : '';
+                    } else {
+                        //$arrValues[] = \String::binToUuid(substr($tempValue,0,16));
+                        $arrValues[] = $tempValue ? \String::binToUuid(substr($tempValue, 0, 16)) : '';
+                    }
+                    $tempValue = substr($tempValue, 17);
                     if (strlen($tempValue) < 16) {
                         $intDoWhile = false;
                     }
