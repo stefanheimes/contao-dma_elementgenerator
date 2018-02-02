@@ -413,10 +413,12 @@ class DMAElementGeneratorCallbacks extends Backend
                         if ($create) {
                             switch ($objField->type) {
                                 case 'select':
-                                    foreach (deserialize($objField->options) as $arrOption) {
-                                        if ($arrOption['default']) {
-                                            $fields[$objField->title] = $arrOption['value'];
-                                            break;
+                                    if($objField->optionsType == 'manual'){
+                                        foreach (deserialize($objField->options) as $arrOption) {
+                                            if ($arrOption['default']) {
+                                                $fields[$objField->title] = $arrOption['value'];
+                                                break;
+                                            }
                                         }
                                     }
                                     break;
